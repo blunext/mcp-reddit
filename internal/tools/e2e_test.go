@@ -26,7 +26,7 @@ func TestToolsOverMCP(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer cs.Close()
+	defer func() { _ = cs.Close() }()
 
 	lt, err := cs.ListTools(ctx, &mcp.ListToolsParams{})
 	if err != nil {
