@@ -38,7 +38,7 @@ Unauthenticated access is not an option: Reddit has returned HTTP 403 to unauthe
 |---|---|---|
 | `REDDIT_CLIENT_ID` | yes | OAuth client id |
 | `REDDIT_CLIENT_SECRET` | yes | OAuth client secret |
-| `REDDIT_USERNAME` | yes, unless `REDDIT_USER_AGENT` is set | Your Reddit username, used as the contact in the User-Agent: `<os>:github.com/blunext/mcp-reddit:<version> (by /u/<username>)`, the format [Reddit's API rules](https://github.com/reddit-archive/reddit/wiki/API) require |
+| `REDDIT_USERNAME` | yes, unless `REDDIT_USER_AGENT` is set | Your Reddit username, used as the contact in the User-Agent: `<os>:mcp-reddit:<version> (by /u/<username>)`, the format [Reddit's API rules](https://github.com/reddit-archive/reddit/wiki/API) require |
 | `REDDIT_USER_AGENT` | no | Full User-Agent override. Keep it unique and descriptive and never imitate a browser; Reddit throttles generic agents and bans spoofed ones. |
 
 ### Claude Code

@@ -54,7 +54,7 @@ func configFromEnv(getenv func(string) string) (reddit.Config, error) {
 				"Reddit's API rules require your username in the User-Agent, see the README (https://github.com/blunext/mcp-reddit#configuration)")
 		}
 		// Reddit's API rules: "<platform>:<app ID>:<version> (by /u/<username>)".
-		ua = fmt.Sprintf("%s:github.com/blunext/mcp-reddit:%s (by /u/%s)", runtime.GOOS, version(), username)
+		ua = fmt.Sprintf("%s:mcp-reddit:%s (by /u/%s)", runtime.GOOS, version(), username)
 	}
 	return reddit.Config{ClientID: id, ClientSecret: secret, UserAgent: ua}, nil
 }

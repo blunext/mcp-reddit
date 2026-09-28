@@ -36,7 +36,7 @@ func TestConfigFromEnvUserAgent(t *testing.T) {
 		t.Errorf("cfg = %+v, err = %v", cfg, err)
 	}
 	// Reddit's API rules ask for "<platform>:<app ID>:<version> (by /u/<username>)".
-	want := runtime.GOOS + ":github.com/blunext/mcp-reddit:dev (by /u/spez)"
+	want := runtime.GOOS + ":mcp-reddit:dev (by /u/spez)"
 	for _, name := range []string{"spez", "u/spez", "/u/spez"} {
 		cfg, err = configFromEnv(env(map[string]string{
 			"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret", "REDDIT_USERNAME": name,
