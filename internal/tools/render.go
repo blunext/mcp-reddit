@@ -11,6 +11,7 @@ const (
 	excerptLen     = 300
 	postBodyLen    = 8000
 	commentBodyLen = 1500
+	maxShownTokens = 3 // batches of up to 100 ids each; huge threads list thousands of ids
 
 	noRelated = "No other submissions of this link were found. This tool only finds reposts of the same link; " +
 		"for text posts or broader coverage use search_posts with keywords from the title.\n"
@@ -106,7 +107,10 @@ func writeMore(b *strings.Builder, m *reddit.More, depth int) {
 		return
 	}
 	indent := strings.Repeat("  ", depth)
-	tokens := strings.Join(m.Tokens, " ")
+	tokens := strings.Join(m.Tokens[:min(len(m.Tokens), maxShownTokens)], " ")
+	if hidden := len(m.Tokens) - maxShownTokens; hidden > 0 {
+		tokens += fmt.Sprintf(" … (%d more batches not shown; for other comments try another comment_sort)", hidden)
+	}
 	if m.Count > 0 {
 		fmt.Fprintf(b, "%s[+%d more replies → expand_comments tokens: %s]\n", indent, m.Count, tokens)
 		return

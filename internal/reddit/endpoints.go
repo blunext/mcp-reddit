@@ -54,7 +54,7 @@ func normalizeSubreddit(s string) string {
 
 // SearchPosts searches submissions, optionally within one subreddit.
 func (c *Client) SearchPosts(ctx context.Context, p SearchParams) (PostPage, error) {
-	q := url.Values{"q": {p.Query}, "type": {"link"}}
+	q := url.Values{"q": {p.Query}, "type": {"link"}, "include_over_18": {"on"}}
 	setNonEmpty(q, "sort", p.Sort)
 	setNonEmpty(q, "t", p.Time)
 	setNonEmpty(q, "after", p.After)
@@ -112,7 +112,7 @@ func (c *Client) Duplicates(ctx context.Context, postID string, limit int) (Post
 
 // SearchSubreddits finds communities by name or topic.
 func (c *Client) SearchSubreddits(ctx context.Context, query string, limit int) ([]Subreddit, error) {
-	q := url.Values{"q": {query}}
+	q := url.Values{"q": {query}, "include_over_18": {"on"}}
 	if limit > 0 {
 		q.Set("limit", strconv.Itoa(limit))
 	}
@@ -126,7 +126,7 @@ func (c *Client) SearchSubreddits(ctx context.Context, query string, limit int) 
 			continue
 		}
 		var d subredditData
-		if err := json.Unmarshal(t.Data, &d); err != nil {
+		if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 			return nil, fmt.Errorf("decoding subreddit: %w", err)
 		}
 		subs = append(subs, Subreddit{

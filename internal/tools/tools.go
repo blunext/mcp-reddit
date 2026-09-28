@@ -263,7 +263,8 @@ func describe(err error) error {
 			"the user must fix the server configuration, see https://github.com/blunext/mcp-reddit#credentials; " +
 			"retrying will not help")
 	case errors.Is(err, reddit.ErrNotFound):
-		return errors.New("not found on reddit: the post or subreddit does not exist, was removed or is banned")
+		return errors.New("not found on reddit: the post or subreddit does not exist, was removed or is banned; " +
+			"if a subreddit name was given, check it with search_subreddits")
 	case errors.Is(err, reddit.ErrForbidden):
 		return errors.New("access denied by reddit: the subreddit is private or quarantined, or the content is restricted")
 	case errors.Is(err, reddit.ErrUnexpectedResponse):

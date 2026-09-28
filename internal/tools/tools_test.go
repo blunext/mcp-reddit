@@ -189,6 +189,7 @@ func TestDescribe(t *testing.T) {
 		{&reddit.RateLimitError{RetryAfter: 42 * time.Second}, "retry in 42 seconds"},
 		{&reddit.AuthError{Status: 401}, "REDDIT_CLIENT_ID"},
 		{reddit.ErrNotFound, "not found"},
+		{reddit.ErrNotFound, "search_subreddits"},
 		{fmt.Errorf("wrapped: %w", reddit.ErrForbidden), "private or quarantined"},
 		{reddit.ErrUnexpectedResponse, "subreddit name may be wrong"},
 		{fmt.Errorf("reddit request failed: %w", context.DeadlineExceeded), "did not respond in time"},

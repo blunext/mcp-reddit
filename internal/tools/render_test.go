@@ -154,3 +154,24 @@ func TestLongCommentTruncated(t *testing.T) {
 		t.Errorf("comment not truncated to 1500 chars:\n%.200s", out)
 	}
 }
+
+func TestLargeMoreMarkerIsCapped(t *testing.T) {
+	tokens := make([]string, 20)
+	for i := range tokens {
+		tokens[i] = "m:" + strings.TrimSuffix(strings.Repeat("abcdefg,", 100), ",")
+	}
+	th := reddit.Thread{
+		Post: reddit.Post{ID: "x", Title: "t", IsSelf: true},
+		More: &reddit.More{Count: 2000, Tokens: tokens},
+	}
+	out := renderThread(th, "top")
+	if n := strings.Count(out, "m:abcdefg"); n != 3 {
+		t.Errorf("marker shows %d tokens, want 3", n)
+	}
+	if !strings.Contains(out, "17 more batches not shown") {
+		t.Errorf("marker should say how many batches are hidden:\n%.300s", out)
+	}
+	if len(out) > 4000 {
+		t.Errorf("output is %d bytes, want a compact marker", len(out))
+	}
+}

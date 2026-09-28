@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"slices"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -273,16 +274,48 @@ func TestStatusMapping(t *testing.T) {
 
 func TestNonJSONResponse(t *testing.T) {
 	ts := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/r/nosuchsub/search" {
-			http.Redirect(w, r, "/subreddits/search?q=nosuchsub", http.StatusFound)
-			return
-		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_, _ = io.WriteString(w, "<html>search page</html>")
 	})
 	var out okBody
-	err := ts.client.get(context.Background(), "/r/nosuchsub/search", nil, &out)
+	err := ts.client.get(context.Background(), "/ping", nil, &out)
 	if !errors.Is(err, ErrUnexpectedResponse) {
 		t.Fatalf("err = %v, want ErrUnexpectedResponse", err)
+	}
+}
+
+// Reddit redirects searches in a nonexistent subreddit to a JSON subreddit
+// search on the same host; following it would silently return "no posts".
+func TestRedirectIsNotFound(t *testing.T) {
+	ts := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/r/nosuchsub/search" {
+			http.Redirect(w, r, "/subreddits/search?q=nosuchsub", http.StatusFound)
+			return
+		}
+		writeJSON(w, `{"kind":"Listing","data":{"after":null,"children":[{"kind":"t5","data":{"display_name":"nosuchsubs"}}]}}`)
+	})
+	_, err := ts.client.SearchPosts(context.Background(), SearchParams{Query: "go", Subreddit: "nosuchsub"})
+	if !errors.Is(err, ErrNotFound) {
+		t.Fatalf("err = %v, want ErrNotFound", err)
+	}
+	if n := ts.apiCalls.Load(); n != 1 {
+		t.Errorf("api calls = %d, want 1 (redirect must not be followed)", n)
+	}
+}
+
+// One malformed string or duplicate key must not make a whole thread unreadable.
+func TestLenientJSONDecoding(t *testing.T) {
+	body := `[{"kind":"Listing","data":{"after":null,"after":null,"children":[{"kind":"t3","data":{"id":"abc123","title":"t","permalink":"/r/x/comments/abc123/t/"}}]}},` +
+		`{"kind":"Listing","data":{"children":[{"kind":"t1","data":{"id":"c1","parent_id":"t3_abc123","author":"a","body":"bad \ud800 text","replies":{"kind":"Listing","data":{"children":[{"kind":"t1","data":{"id":"c2","body":"x \udc00","replies":""}}]}}}}]}}]`
+	ts := newTestServer(t, func(w http.ResponseWriter, r *http.Request) { writeJSON(w, body) })
+	th, err := ts.client.GetThread(context.Background(), "abc123", ThreadParams{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(th.Comments) != 1 || !strings.Contains(th.Comments[0].Body, "\uFFFD") && !strings.Contains(th.Comments[0].Body, "�") {
+		t.Errorf("comments = %+v, want body with U+FFFD", th.Comments)
+	}
+	if len(th.Comments[0].Replies) != 1 {
+		t.Errorf("nested reply with a lone surrogate was lost: %+v", th.Comments[0].Replies)
 	}
 }

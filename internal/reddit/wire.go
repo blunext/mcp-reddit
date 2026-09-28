@@ -13,6 +13,11 @@ const (
 	maxMoreIDs = 100 // Reddit's limit for one /api/morechildren call
 )
 
+// jsonOpts relaxes json/v2's strict defaults so that one malformed string
+// (e.g. a lone surrogate in a comment) or a duplicate key cannot make a whole
+// response unreadable, as encoding/json v1 would have tolerated.
+var jsonOpts = json.JoinOptions(jsontext.AllowInvalidUTF8(true), jsontext.AllowDuplicateNames(true))
+
 // thing is Reddit's {"kind": ..., "data": {...}} envelope.
 type thing struct {
 	Kind string         `json:"kind"`
@@ -79,7 +84,7 @@ func (r *replies) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		return nil
 	}
 	var l listing
-	if err := json.Unmarshal(v, &l); err != nil {
+	if err := json.Unmarshal(v, &l, jsonOpts); err != nil {
 		return err
 	}
 	r.listing = &l
@@ -110,7 +115,7 @@ func decodePost(t thing) (Post, error) {
 		return Post{}, fmt.Errorf("reddit: expected a post (t3), got %q", t.Kind)
 	}
 	var d linkData
-	if err := json.Unmarshal(t.Data, &d); err != nil {
+	if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 		return Post{}, fmt.Errorf("decoding post: %w", err)
 	}
 	return toPost(d), nil
@@ -159,7 +164,7 @@ func convertChildren(ts []thing) ([]Comment, *More, error) {
 		switch t.Kind {
 		case "t1":
 			var d commentData
-			if err := json.Unmarshal(t.Data, &d); err != nil {
+			if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 				return nil, nil, fmt.Errorf("decoding comment: %w", err)
 			}
 			c, err := toComment(d)
@@ -169,7 +174,7 @@ func convertChildren(ts []thing) ([]Comment, *More, error) {
 			comments = append(comments, c)
 		case "more":
 			var d moreData
-			if err := json.Unmarshal(t.Data, &d); err != nil {
+			if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 				return nil, nil, fmt.Errorf("decoding more marker: %w", err)
 			}
 			more = mergeMore(more, toMore(d))

@@ -139,7 +139,9 @@ func (c *Client) doAPI(ctx context.Context, endpoint string) (*http.Response, er
 	}
 	req.Header.Set("Authorization", "Bearer "+tok)
 	req.Header.Set("User-Agent", c.cfg.UserAgent)
-	resp, err := c.http.Do(req)
+	// Redirects are not followed: Reddit redirects searches in a nonexistent
+	// subreddit to a subreddit search, which would decode as "no posts".
+	resp, err := c.noRedirect.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("reddit request failed: %w", err)
 	}
@@ -152,7 +154,8 @@ func decodeResponse(resp *http.Response, out any) error {
 	switch {
 	case resp.StatusCode == http.StatusForbidden:
 		return ErrForbidden
-	case resp.StatusCode == http.StatusNotFound:
+	case resp.StatusCode == http.StatusNotFound,
+		resp.StatusCode >= 300 && resp.StatusCode < 400:
 		return ErrNotFound
 	case resp.StatusCode < 200 || resp.StatusCode > 299:
 		return &StatusError{Status: resp.StatusCode}
@@ -160,7 +163,7 @@ func decodeResponse(resp *http.Response, out any) error {
 	if !strings.Contains(resp.Header.Get("Content-Type"), "json") {
 		return ErrUnexpectedResponse
 	}
-	if err := json.UnmarshalRead(resp.Body, out); err != nil {
+	if err := json.UnmarshalRead(resp.Body, out, jsonOpts); err != nil {
 		return fmt.Errorf("decoding reddit response: %w", err)
 	}
 	return nil
@@ -203,7 +206,7 @@ func (c *Client) accessToken(ctx context.Context) (string, error) {
 		ExpiresIn   int    `json:"expires_in"`
 		Error       string `json:"error"`
 	}
-	if err := json.UnmarshalRead(resp.Body, &tr); err != nil {
+	if err := json.UnmarshalRead(resp.Body, &tr, jsonOpts); err != nil {
 		return "", fmt.Errorf("decoding reddit access token: %w", err)
 	}
 	if tr.AccessToken == "" {

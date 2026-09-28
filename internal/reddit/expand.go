@@ -100,7 +100,7 @@ func buildFragments(things []thing) ([]Fragment, error) {
 		switch t.Kind {
 		case "t1":
 			var d commentData
-			if err := json.Unmarshal(t.Data, &d); err != nil {
+			if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 				return nil, fmt.Errorf("decoding comment: %w", err)
 			}
 			c, err := toComment(d)
@@ -112,7 +112,7 @@ func buildFragments(things []thing) ([]Fragment, error) {
 			order = append(order, n)
 		case "more":
 			var d moreData
-			if err := json.Unmarshal(t.Data, &d); err != nil {
+			if err := json.Unmarshal(t.Data, &d, jsonOpts); err != nil {
 				return nil, fmt.Errorf("decoding more marker: %w", err)
 			}
 			if m := toMore(d); m != nil {

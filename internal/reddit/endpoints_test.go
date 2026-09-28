@@ -29,7 +29,7 @@ func fixtureAt(t *testing.T, path string, query url.Values, fixture string) http
 func TestSearchPostsInSubreddit(t *testing.T) {
 	ts := newTestServer(t, fixtureAt(t, "/r/golang/search", url.Values{
 		"q": {"cli tools"}, "restrict_sr": {"1"}, "type": {"link"}, "sort": {"top"}, "t": {"year"},
-		"limit": {"5"}, "after": {"t3_prev"},
+		"limit": {"5"}, "after": {"t3_prev"}, "include_over_18": {"on"},
 	}, "search.json"))
 	page, err := ts.client.SearchPosts(context.Background(), SearchParams{
 		Query: "cli tools", Subreddit: "r/golang", Sort: "top", Time: "year", Limit: 5, After: "t3_prev",
@@ -78,7 +78,7 @@ func TestDuplicates(t *testing.T) {
 }
 
 func TestSearchSubreddits(t *testing.T) {
-	ts := newTestServer(t, fixtureAt(t, "/subreddits/search", url.Values{"q": {"golang"}, "limit": {"10"}}, "subreddits.json"))
+	ts := newTestServer(t, fixtureAt(t, "/subreddits/search", url.Values{"q": {"golang"}, "limit": {"10"}, "include_over_18": {"on"}}, "subreddits.json"))
 	subs, err := ts.client.SearchSubreddits(context.Background(), "golang", 10)
 	if err != nil {
 		t.Fatal(err)
