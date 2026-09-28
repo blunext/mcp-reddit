@@ -42,6 +42,7 @@ The project is open source. Each user runs the binary locally over stdio with th
 | Output | Compact plain text, no structured output (token efficiency) |
 | Persistence | None; nothing is ever written to disk |
 | Module path | `github.com/blunext/mcp-reddit` |
+| JSON | `encoding/json/v2` (and `encoding/json/jsontext`) everywhere in our code; never `encoding/json` v1. Custom decoding uses `UnmarshalJSONFrom(*jsontext.Decoder)` |
 
 ## Architecture
 
@@ -136,7 +137,7 @@ internal/tools/          MCP tools: input structs, handlers, text formatting
 
 **Parsing**
 - `/comments/{id}` returns a two-element array (post listing, comment listing).
-- `replies` is either a listing or `""`; a custom `UnmarshalJSON` handles both.
+- `replies` is either a listing or `""`; a custom `UnmarshalJSONFrom` (json/v2) handles both.
 - `more` things become `MoreMarker{Count, Token}`.
 - `/api/morechildren` returns a flat list with `parent_id`, which the client reassembles into trees.
 

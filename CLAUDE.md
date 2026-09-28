@@ -35,4 +35,5 @@ Integration tests hit the live Reddit API and run only when `REDDIT_CLIENT_ID` a
 - **Read-only.** No write endpoints, no user login.
 - **No persistence.** Never write Reddit data to disk. `PRIVACY.md` promises this under Reddit's Responsible Builder Policy (48-hour deletion, no model training), so keep the code and that file in sync.
 - **Tool errors, not protocol errors.** Reddit failures are returned as tool results with `IsError: true` and messages written for the model.
+- **JSON: use `encoding/json/v2` and `encoding/json/jsontext`, never `encoding/json` v1.** Custom decoders implement `UnmarshalJSONFrom`.
 - **Tool calls must not block for long.** On an exhausted rate limit, wait only if the reset is ≤ 5 s away; otherwise return an error.
