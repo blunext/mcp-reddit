@@ -47,4 +47,4 @@ Changes to this policy are published in this file in the project repository, wit
 
 ## Contact
 
-Questions about this policy: open an issue in the project repository or contact <CONTACT_EMAIL>.
+Questions about this policy: open an issue in the project repository.
