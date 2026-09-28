@@ -8,7 +8,9 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"runtime"
 	"runtime/debug"
+	"strings"
 	"syscall"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -46,9 +48,21 @@ func configFromEnv(getenv func(string) string) (reddit.Config, error) {
 	}
 	ua := getenv("REDDIT_USER_AGENT")
 	if ua == "" {
-		ua = fmt.Sprintf("mcp-reddit/%s (+https://github.com/blunext/mcp-reddit)", version())
+		ua = defaultUserAgent(getenv("REDDIT_USERNAME"))
 	}
 	return reddit.Config{ClientID: id, ClientSecret: secret, UserAgent: ua}, nil
+}
+
+// defaultUserAgent follows Reddit's API rules:
+// "<platform>:<app ID>:<version> (by /u/<username>)". Without a username the
+// project URL is the contact instead.
+func defaultUserAgent(username string) string {
+	username = strings.TrimPrefix(strings.TrimPrefix(username, "/"), "u/")
+	contact := "+https://github.com/blunext/mcp-reddit"
+	if username != "" {
+		contact = "by /u/" + username
+	}
+	return fmt.Sprintf("%s:github.com/blunext/mcp-reddit:%s (%s)", runtime.GOOS, version(), contact)
 }
 
 func version() string {

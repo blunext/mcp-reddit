@@ -38,14 +38,15 @@ Unauthenticated access is not an option: Reddit has returned HTTP 403 to unauthe
 |---|---|---|
 | `REDDIT_CLIENT_ID` | yes | OAuth client id |
 | `REDDIT_CLIENT_SECRET` | yes | OAuth client secret |
-| `REDDIT_USER_AGENT` | no | Custom User-Agent; defaults to `mcp-reddit/<version> (+https://github.com/blunext/mcp-reddit)` |
+| `REDDIT_USERNAME` | recommended | Your Reddit username, used as the contact in the User-Agent: `<os>:github.com/blunext/mcp-reddit:<version> (by /u/<username>)`, the format [Reddit's API rules](https://github.com/reddit-archive/reddit/wiki/API) ask for. Without it the project URL is the contact. |
+| `REDDIT_USER_AGENT` | no | Full User-Agent override. Keep it unique and descriptive and never imitate a browser; Reddit throttles generic agents and bans spoofed ones. |
 
 ### Claude Code
 
 Plain environment variables (the secret is stored in plain text in your Claude Code config):
 
 ```sh
-claude mcp add reddit -e REDDIT_CLIENT_ID=your-id -e REDDIT_CLIENT_SECRET=your-secret -- mcp-reddit
+claude mcp add reddit -e REDDIT_CLIENT_ID=your-id -e REDDIT_CLIENT_SECRET=your-secret -e REDDIT_USERNAME=your-username -- mcp-reddit
 ```
 
 Recommended: keep the secret in a password manager and fetch it when the server starts.

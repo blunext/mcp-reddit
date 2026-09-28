@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -31,8 +32,18 @@ func TestConfigFromEnvUserAgent(t *testing.T) {
 	if cfg.ClientID != "id" || cfg.ClientSecret != "secret" {
 		t.Errorf("cfg = %+v", cfg)
 	}
-	if !strings.HasPrefix(cfg.UserAgent, "mcp-reddit/") || !strings.Contains(cfg.UserAgent, "github.com/blunext/mcp-reddit") {
-		t.Errorf("default user agent = %q", cfg.UserAgent)
+	// Reddit's API rules ask for "<platform>:<app ID>:<version> (by /u/<username>)".
+	wantPrefix := runtime.GOOS + ":github.com/blunext/mcp-reddit:dev "
+	if want := wantPrefix + "(+https://github.com/blunext/mcp-reddit)"; cfg.UserAgent != want {
+		t.Errorf("default user agent = %q, want %q", cfg.UserAgent, want)
+	}
+	for _, name := range []string{"spez", "u/spez", "/u/spez"} {
+		cfg, err = configFromEnv(env(map[string]string{
+			"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret", "REDDIT_USERNAME": name,
+		}))
+		if want := wantPrefix + "(by /u/spez)"; err != nil || cfg.UserAgent != want {
+			t.Errorf("REDDIT_USERNAME=%q: user agent = %q, want %q (err %v)", name, cfg.UserAgent, want, err)
+		}
 	}
 	cfg, err = configFromEnv(env(map[string]string{
 		"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret", "REDDIT_USER_AGENT": "custom/1.0 (by /u/me)",
