@@ -26,7 +26,7 @@ The AI assistant (MCP client) and its model provider are chosen and configured b
 
 ## Storage and retention
 
-- Reddit content is held **in memory only**, for the duration of the request that fetched it. The software may keep a short-lived in-memory cache (minutes, never beyond the lifetime of the process) to avoid repeated identical requests.
+- Reddit content is held **in memory only**, for the duration of the request that fetched it. There is no cache.
 - Nothing is written to disk, to a database, or to any remote location by this software.
 - All data is discarded when the process exits. Nothing is retained for anywhere near Reddit's recommended 48-hour limit, and content deleted on Reddit is never kept.
 
@@ -35,11 +35,14 @@ The AI assistant (MCP client) and its model provider are chosen and configured b
 - It does not use Reddit data to train, fine-tune, or evaluate machine-learning or AI models.
 - It does not sell, license, share, or commercialize Reddit data.
 - It does not build profiles of Reddit users or track them across requests.
+- It does not infer sensitive characteristics of Reddit users (such as health, political affiliation or sexual orientation), and does not attempt to re-identify or de-anonymize them.
 - It does not collect analytics or telemetry about its users.
 
 ## Credentials
 
 The Reddit client ID and secret are supplied by the user through environment variables on their own machine. They are sent only to Reddit's OAuth endpoints and are never stored by the software or transmitted anywhere else.
+
+The user's Reddit username (`REDDIT_USERNAME`) is included in the User-Agent header of every request to Reddit, as Reddit's API rules require. It is sent to Reddit only.
 
 ## Changes
 
