@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The design is in `docs/superpowers/specs/2026-09-28-reddit-mcp-design.md`. Read it before changing tools, the Reddit client or auth. Stage 1 is implemented per `docs/superpowers/plans/2026-09-28-reddit-mcp-stage1.md`.
 
+Open work lives in `docs/TODO.md` (checkbox list). Check it when planning new work, tick items off when they are done, and add new deferred findings there.
+
 ## Commands
 
 Standard Go tooling:
