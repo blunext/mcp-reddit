@@ -1,0 +1,35 @@
+[
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t3", "data": {
+      "id": "abc123", "name": "t3_abc123", "title": "Is Go good for CLI tools?",
+      "subreddit": "golang", "author": "gopher",
+      "selftext": "Thinking about rewriting our tools.\n\nOpinions?",
+      "url": "https://www.reddit.com/r/golang/comments/abc123/is_go_good_for_cli_tools/",
+      "permalink": "/r/golang/comments/abc123/is_go_good_for_cli_tools/",
+      "score": 350, "num_comments": 42, "created_utc": 1790000000.0,
+      "is_self": true, "over_18": false, "edited": false
+    }}
+  ]}},
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t1", "data": {
+      "id": "c1", "name": "t1_c1", "parent_id": "t3_abc123", "author": "alice",
+      "body": "Yes, cobra & stdlib flag are great.", "score": 120, "created_utc": 1790000100.0,
+      "edited": 1790000200.0,
+      "replies": {"kind": "Listing", "data": {"after": null, "children": [
+        {"kind": "t1", "data": {
+          "id": "c2", "name": "t1_c2", "parent_id": "t1_c1", "author": "bob",
+          "body": "Agreed.\n\nSingle binary is the killer feature.", "score": 45,
+          "created_utc": 1790000300.0, "edited": false,
+          "replies": {"kind": "Listing", "data": {"after": null, "children": [
+            {"kind": "more", "data": {"id": "_", "name": "t1__", "parent_id": "t1_c2", "count": 0, "depth": 10, "children": []}}
+          ]}}
+        }}
+      ]}}
+    }},
+    {"kind": "t1", "data": {
+      "id": "c3", "name": "t1_c3", "parent_id": "t3_abc123", "author": "[deleted]",
+      "body": "[removed]", "score": -2, "created_utc": 1790000400.0, "edited": false, "replies": ""
+    }},
+    {"kind": "more", "data": {"id": "m1", "name": "t1_m1", "parent_id": "t3_abc123", "count": 3, "depth": 0, "children": ["m1", "m2", "m3"]}}
+  ]}}
+]
