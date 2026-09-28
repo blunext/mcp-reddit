@@ -1,0 +1,18 @@
+[
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t3", "data": {"id": "abc123", "title": "Is Go good for CLI tools?", "subreddit": "golang",
+      "author": "gopher", "selftext": "", "url": "", "permalink": "/r/golang/comments/abc123/x/",
+      "score": 350, "num_comments": 42, "created_utc": 1790000000.0, "is_self": true, "over_18": false}}
+  ]}},
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t1", "data": {"id": "c2", "parent_id": "t1_c1", "author": "bob", "body": "Agreed.",
+      "score": 45, "created_utc": 1790000300.0,
+      "replies": {"kind": "Listing", "data": {"after": null, "children": [
+        {"kind": "t1", "data": {"id": "c4", "parent_id": "t1_c2", "author": "frank", "body": "Deep reply one.",
+          "score": 3, "created_utc": 1790000800.0, "replies": ""}},
+        {"kind": "t1", "data": {"id": "c5", "parent_id": "t1_c2", "author": "grace", "body": "Deep reply two.",
+          "score": 1, "created_utc": 1790000900.0, "replies": ""}}
+      ]}}
+    }}
+  ]}}
+]
