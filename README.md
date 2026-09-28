@@ -1,6 +1,6 @@
 # mcp-reddit
 
-A read-only [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Code and Claude Desktop research Reddit: search posts, read threads with their comments, expand collapsed branches, find other discussions of the same link, and discover subreddits.
+A read-only [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Code and Claude Desktop read and summarize Reddit discussions for you: search posts, read threads with their comments, expand collapsed branches, find other discussions of the same link, and discover subreddits.
 
 It runs locally over stdio, uses Reddit's official OAuth API with your own credentials, never writes anything to Reddit and never stores Reddit data. See [PRIVACY.md](PRIVACY.md).
 
@@ -27,8 +27,8 @@ The server needs Reddit API credentials (a client id and secret) for application
 Since November 2025 Reddit no longer issues API keys self-service at reddit.com/prefs/apps. To get credentials:
 
 1. Read Reddit's [Responsible Builder Policy](https://support.reddithelp.com/hc/en-us/articles/42728983564564-Responsible-Builder-Policy).
-2. Submit a request through [Reddit Developer Support](https://support.reddithelp.com/hc/en-us/requests/new?ticket_form_id=14868593862164). Describe your use case, the data you need and your expected request volume, and link to a privacy policy.
-3. Wait for manual review. It can take weeks, and requests can be rejected.
+2. Submit a request through the [Data Access Request form](https://support.reddithelp.com/hc/en-us/requests/new?ticket_form_id=14868593862164). Choose "I'm a developer", then "I'm a developer and want to build a Reddit App that does not work in the Devvit ecosystem". The form asks for your Reddit username, the purpose of the app, a detailed description of what it does, what Devvit is missing for your use case, a link to the source code and the subreddits you'll use. Describe your own use honestly: which data you read, that access is read-only, your expected request volume, and link to this project's [privacy policy](PRIVACY.md). Submit only one request per use case.
+3. Wait for manual review. It can take weeks, and requests can be rejected or go unanswered.
 
 Unauthenticated access is not an option: Reddit has returned HTTP 403 to unauthenticated API requests since May 2026.
 
