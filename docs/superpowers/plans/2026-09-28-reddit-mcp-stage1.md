@@ -3569,10 +3569,10 @@ Live tests run against the real API when `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_S
 
 ## License
 
-TBD by the maintainer.
+[MIT](LICENSE)
 ````
 
-**Before writing that last section:** the repository has no license yet. Ask the user which license to use (MIT is typical) and write its name there, plus a `LICENSE` file. Do not commit the README with "TBD" in it.
+Also create `LICENSE` with the standard MIT License text, `Copyright (c) 2026 Blunext`.
 
 - [ ] **Step 5: Run the full verification**
 
