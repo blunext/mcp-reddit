@@ -1,4 +1,4 @@
-# Backlog
+# TODO
 
 Deferred findings from the stage 1 final review (2026-09-28). None blocks stage 1; pick them up when planning stage 2.
 
