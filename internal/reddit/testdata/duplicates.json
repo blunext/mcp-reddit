@@ -1,0 +1,12 @@
+[
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t3", "data": {"id": "p2", "title": "Benchmark article", "subreddit": "programming", "author": "bob",
+      "selftext": "", "url": "https://example.com/bench", "permalink": "/r/programming/comments/p2/benchmark_article/",
+      "score": 15, "num_comments": 3, "created_utc": 1789500000.0, "is_self": false, "over_18": false}}
+  ]}},
+  {"kind": "Listing", "data": {"after": null, "children": [
+    {"kind": "t3", "data": {"id": "p3", "title": "Benchmark article", "subreddit": "rust", "author": "carol",
+      "selftext": "", "url": "https://example.com/bench", "permalink": "/r/rust/comments/p3/benchmark_article/",
+      "score": 40, "num_comments": 12, "created_utc": 1789600000.0, "is_self": false, "over_18": false}}
+  ]}}
+]

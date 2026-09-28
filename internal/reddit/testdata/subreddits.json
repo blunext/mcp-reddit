@@ -1,0 +1,7 @@
+{"kind": "Listing", "data": {"after": null, "children": [
+  {"kind": "t5", "data": {"display_name": "golang", "title": "The Go Programming Language",
+    "public_description": "Ask questions and post articles about the Go programming language.",
+    "subscribers": 300000, "over18": false}},
+  {"kind": "t5", "data": {"display_name": "gomemes", "title": "Go memes", "public_description": "",
+    "subscribers": null, "over18": true}}
+]}}

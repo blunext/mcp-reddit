@@ -1,0 +1,10 @@
+{"kind": "Listing", "data": {"after": "t3_next", "children": [
+  {"kind": "t3", "data": {"id": "p1", "title": "Go vs Rust for CLIs", "subreddit": "golang", "author": "alice",
+    "selftext": "Which one would you pick?", "url": "https://www.reddit.com/r/golang/comments/p1/go_vs_rust_for_clis/",
+    "permalink": "/r/golang/comments/p1/go_vs_rust_for_clis/", "score": 210, "num_comments": 88,
+    "created_utc": 1789000000.0, "is_self": true, "over_18": false}},
+  {"kind": "t3", "data": {"id": "p2", "title": "Benchmark article", "subreddit": "programming", "author": "bob",
+    "selftext": "", "url": "https://example.com/bench",
+    "permalink": "/r/programming/comments/p2/benchmark_article/", "score": 15, "num_comments": 3,
+    "created_utc": 1789500000.0, "is_self": false, "over_18": true}}
+]}}
