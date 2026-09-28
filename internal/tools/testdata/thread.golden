@@ -1,0 +1,15 @@
+Is Go good for CLI tools?
+r/golang · 350 points · 42 comments · 2026-09-01 · u/gopher · id: abc123
+https://www.reddit.com/r/golang/comments/abc123/is_go_good/
+
+Thinking about rewriting our tools.
+
+Opinions?
+
+--- Comments (sort: top) ---
+[120] u/alice (c1) 2026-09-01: Yes, cobra & stdlib flag are great.
+  [45] u/bob (c2) 2026-09-01: Agreed.
+      Single binary is the killer feature.
+    [continue this thread → expand_comments tokens: c:c2]
+[-2] u/[deleted] (c3) 2026-09-01: [removed]
+[+3 more replies → expand_comments tokens: m:m1,m2,m3]
