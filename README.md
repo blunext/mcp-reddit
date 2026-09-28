@@ -62,7 +62,7 @@ The MCP client starts the server without a terminal, so gopass cannot prompt for
 1Password CLI:
 
 ```sh
-claude mcp add reddit -e REDDIT_CLIENT_ID="op://Private/Reddit API/username" -e REDDIT_CLIENT_SECRET="op://Private/Reddit API/credential" -- op run -- mcp-reddit
+claude mcp add reddit -e REDDIT_USERNAME=your-username -e REDDIT_CLIENT_ID="op://Private/Reddit API/username" -e REDDIT_CLIENT_SECRET="op://Private/Reddit API/credential" -- op run -- mcp-reddit
 ```
 
 macOS Keychain (store the secret first with `security add-generic-password -s mcp-reddit -a client-secret -w`):
