@@ -25,23 +25,23 @@ func TestConfigFromEnvRequiresCredentials(t *testing.T) {
 }
 
 func TestConfigFromEnvUserAgent(t *testing.T) {
-	cfg, err := configFromEnv(env(map[string]string{"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret"}))
-	if err != nil {
-		t.Fatal(err)
+	_, err := configFromEnv(env(map[string]string{"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret"}))
+	if err == nil || !strings.Contains(err.Error(), "REDDIT_USERNAME") || !strings.Contains(err.Error(), "README") {
+		t.Errorf("without a username: err = %v, want a message naming REDDIT_USERNAME and the README", err)
 	}
-	if cfg.ClientID != "id" || cfg.ClientSecret != "secret" {
-		t.Errorf("cfg = %+v", cfg)
+	cfg, err := configFromEnv(env(map[string]string{
+		"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret", "REDDIT_USERNAME": "spez",
+	}))
+	if err != nil || cfg.ClientID != "id" || cfg.ClientSecret != "secret" {
+		t.Errorf("cfg = %+v, err = %v", cfg, err)
 	}
 	// Reddit's API rules ask for "<platform>:<app ID>:<version> (by /u/<username>)".
-	wantPrefix := runtime.GOOS + ":github.com/blunext/mcp-reddit:dev "
-	if want := wantPrefix + "(+https://github.com/blunext/mcp-reddit)"; cfg.UserAgent != want {
-		t.Errorf("default user agent = %q, want %q", cfg.UserAgent, want)
-	}
+	want := runtime.GOOS + ":github.com/blunext/mcp-reddit:dev (by /u/spez)"
 	for _, name := range []string{"spez", "u/spez", "/u/spez"} {
 		cfg, err = configFromEnv(env(map[string]string{
 			"REDDIT_CLIENT_ID": "id", "REDDIT_CLIENT_SECRET": "secret", "REDDIT_USERNAME": name,
 		}))
-		if want := wantPrefix + "(by /u/spez)"; err != nil || cfg.UserAgent != want {
+		if err != nil || cfg.UserAgent != want {
 			t.Errorf("REDDIT_USERNAME=%q: user agent = %q, want %q (err %v)", name, cfg.UserAgent, want, err)
 		}
 	}

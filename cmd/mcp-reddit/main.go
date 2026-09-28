@@ -48,21 +48,15 @@ func configFromEnv(getenv func(string) string) (reddit.Config, error) {
 	}
 	ua := getenv("REDDIT_USER_AGENT")
 	if ua == "" {
-		ua = defaultUserAgent(getenv("REDDIT_USERNAME"))
+		username := strings.TrimPrefix(strings.TrimPrefix(getenv("REDDIT_USERNAME"), "/"), "u/")
+		if username == "" {
+			return reddit.Config{}, errors.New("REDDIT_USERNAME must be set (or a full REDDIT_USER_AGENT); " +
+				"Reddit's API rules require your username in the User-Agent, see the README (https://github.com/blunext/mcp-reddit#configuration)")
+		}
+		// Reddit's API rules: "<platform>:<app ID>:<version> (by /u/<username>)".
+		ua = fmt.Sprintf("%s:github.com/blunext/mcp-reddit:%s (by /u/%s)", runtime.GOOS, version(), username)
 	}
 	return reddit.Config{ClientID: id, ClientSecret: secret, UserAgent: ua}, nil
-}
-
-// defaultUserAgent follows Reddit's API rules:
-// "<platform>:<app ID>:<version> (by /u/<username>)". Without a username the
-// project URL is the contact instead.
-func defaultUserAgent(username string) string {
-	username = strings.TrimPrefix(strings.TrimPrefix(username, "/"), "u/")
-	contact := "+https://github.com/blunext/mcp-reddit"
-	if username != "" {
-		contact = "by /u/" + username
-	}
-	return fmt.Sprintf("%s:github.com/blunext/mcp-reddit:%s (%s)", runtime.GOOS, version(), contact)
 }
 
 func version() string {

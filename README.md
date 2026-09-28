@@ -38,7 +38,7 @@ Unauthenticated access is not an option: Reddit has returned HTTP 403 to unauthe
 |---|---|---|
 | `REDDIT_CLIENT_ID` | yes | OAuth client id |
 | `REDDIT_CLIENT_SECRET` | yes | OAuth client secret |
-| `REDDIT_USERNAME` | recommended | Your Reddit username, used as the contact in the User-Agent: `<os>:github.com/blunext/mcp-reddit:<version> (by /u/<username>)`, the format [Reddit's API rules](https://github.com/reddit-archive/reddit/wiki/API) ask for. Without it the project URL is the contact. |
+| `REDDIT_USERNAME` | yes, unless `REDDIT_USER_AGENT` is set | Your Reddit username, used as the contact in the User-Agent: `<os>:github.com/blunext/mcp-reddit:<version> (by /u/<username>)`, the format [Reddit's API rules](https://github.com/reddit-archive/reddit/wiki/API) require |
 | `REDDIT_USER_AGENT` | no | Full User-Agent override. Keep it unique and descriptive and never imitate a browser; Reddit throttles generic agents and bans spoofed ones. |
 
 ### Claude Code
@@ -54,7 +54,7 @@ Recommended: keep the secret in a password manager and fetch it when the server 
 gopass:
 
 ```sh
-claude mcp add reddit -- sh -c 'REDDIT_CLIENT_ID="$(gopass show -o reddit/client-id)" REDDIT_CLIENT_SECRET="$(gopass show -o reddit/client-secret)" exec mcp-reddit'
+claude mcp add reddit -e REDDIT_USERNAME=your-username -- sh -c 'REDDIT_CLIENT_ID="$(gopass show -o reddit/client-id)" REDDIT_CLIENT_SECRET="$(gopass show -o reddit/client-secret)" exec mcp-reddit'
 ```
 
 The MCP client starts the server without a terminal, so gopass cannot prompt for your GPG passphrase. Make sure `gpg-agent` already has the key unlocked, or configure a graphical pinentry.
@@ -68,7 +68,7 @@ claude mcp add reddit -e REDDIT_CLIENT_ID="op://Private/Reddit API/username" -e 
 macOS Keychain (store the secret first with `security add-generic-password -s mcp-reddit -a client-secret -w`):
 
 ```sh
-claude mcp add reddit -e REDDIT_CLIENT_ID=your-id -- sh -c 'REDDIT_CLIENT_SECRET="$(security find-generic-password -s mcp-reddit -a client-secret -w)" exec mcp-reddit'
+claude mcp add reddit -e REDDIT_USERNAME=your-username -e REDDIT_CLIENT_ID=your-id -- sh -c 'REDDIT_CLIENT_SECRET="$(security find-generic-password -s mcp-reddit -a client-secret -w)" exec mcp-reddit'
 ```
 
 ### Claude Desktop

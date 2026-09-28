@@ -57,7 +57,7 @@ internal/tools/          MCP tools: input structs, handlers, text formatting
 **Boundaries:**
 - `internal/reddit` hides Reddit's wire format: `Listing`/`Thing` envelopes, `t1_`/`t3_`/`t5_` prefixes, `replies` sometimes being `""`, and the flat `morechildren` responses. It exposes domain types and methods: `SearchPosts`, `GetPost`, `MoreComments`, `Duplicates`, `SearchSubreddits`, `ResolvePostRef`.
 - `internal/tools` depends on the client through a small interface declared in `tools`, so handlers and formatting are tested with a fake.
-- `main.go` reads `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`, an optional `REDDIT_USERNAME` and an optional `REDDIT_USER_AGENT`. The default user agent follows Reddit's API rules: `<GOOS>:github.com/blunext/mcp-reddit:<version> (by /u/<REDDIT_USERNAME>)`, with `(+https://github.com/blunext/mcp-reddit)` as the contact when no username is set. If either credential is missing, the server exits non-zero with a message pointing to the README. stdout belongs to the MCP protocol, so all logging goes to stderr.
+- `main.go` reads `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`, `REDDIT_USERNAME` and an optional `REDDIT_USER_AGENT`. The user agent follows Reddit's API rules: `<GOOS>:github.com/blunext/mcp-reddit:<version> (by /u/<REDDIT_USERNAME>)`; `REDDIT_USER_AGENT` replaces it entirely, and then `REDDIT_USERNAME` is not needed. If a credential or the username is missing, the server exits non-zero with a message pointing to the README. stdout belongs to the MCP protocol, so all logging goes to stderr.
 - Every tool carries the annotation `ReadOnlyHint: true`.
 
 ## Tools
@@ -173,7 +173,7 @@ Reddit-side problems are returned as tool errors (`IsError: true`) with messages
 ## Configuration (README content)
 
 - How to obtain credentials: the Developer Support application and the Responsible Builder Policy. It states plainly that approval is manual and can take weeks.
-- Environment variables: `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`, optional `REDDIT_USERNAME` and `REDDIT_USER_AGENT`.
+- Environment variables: `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`, `REDDIT_USERNAME`, optional `REDDIT_USER_AGENT`.
 - Plain setup for Claude Code:
   ```sh
   claude mcp add reddit -e REDDIT_CLIENT_ID=… -e REDDIT_CLIENT_SECRET=… -- mcp-reddit
